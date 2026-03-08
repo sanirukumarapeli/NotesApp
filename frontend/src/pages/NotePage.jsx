@@ -76,7 +76,7 @@ const NotePage = () => {
     if (loading) {
         return (
             <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500"></div>
             </div>
         );
     }
@@ -89,7 +89,7 @@ const NotePage = () => {
             <div className="flex items-center justify-between mb-6">
                 <button
                     onClick={() => navigate('/')}
-                    className="text-gray-500 hover:text-gray-700 text-sm font-medium inline-flex items-center space-x-1"
+                    className="text-zinc-400 hover:text-zinc-200 text-sm font-medium inline-flex items-center space-x-1 transition-colors"
                 >
                     <span>← Back to Dashboard</span>
                 </button>
@@ -99,15 +99,15 @@ const NotePage = () => {
                             <button
                                 onClick={handleTogglePin}
                                 className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${note.isPinned
-                                        ? 'bg-indigo-50 border-indigo-200 text-indigo-700'
-                                        : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                                    ? 'bg-indigo-500/20 border-indigo-500/50 text-indigo-400'
+                                    : 'border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
                                     }`}
                             >
                                 {note.isPinned ? '📌 Pinned' : '📌 Pin'}
                             </button>
                             <button
                                 onClick={() => setShowCollaborators(true)}
-                                className="px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
+                                className="px-3 py-1.5 rounded-lg text-sm font-medium border border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200 transition-colors"
                             >
                                 👥 Collaborators ({note.collaborators?.length || 0})
                             </button>
@@ -117,7 +117,7 @@ const NotePage = () => {
                         <button
                             onClick={handleSave}
                             disabled={saving}
-                            className="bg-indigo-600 text-white px-5 py-1.5 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50"
+                            className="bg-indigo-600 text-white px-5 py-1.5 rounded-lg text-sm font-medium hover:bg-indigo-500 active:scale-95 transition-all duration-200 shadow-[0_0_10px_rgba(79,70,229,0.3)] disabled:opacity-50"
                         >
                             {saving ? 'Saving...' : 'Save'}
                         </button>
@@ -126,7 +126,7 @@ const NotePage = () => {
             </div>
 
             {/* Note info */}
-            <div className="mb-4 flex items-center space-x-3 text-xs text-gray-400">
+            <div className="mb-4 flex items-center space-x-3 text-xs text-zinc-500">
                 <span>By {note.owner?.name}</span>
                 <span>•</span>
                 <span>
@@ -136,9 +136,9 @@ const NotePage = () => {
                     <>
                         <span>•</span>
                         <span
-                            className={`px-2 py-0.5 rounded-full ${userRole === 'editor'
-                                    ? 'bg-green-100 text-green-700'
-                                    : 'bg-gray-100 text-gray-600'
+                            className={`px-2 py-0.5 rounded-full border ${userRole === 'editor'
+                                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                                : 'bg-zinc-800 text-zinc-400 border-zinc-700'
                                 }`}
                         >
                             {userRole}
@@ -154,16 +154,16 @@ const NotePage = () => {
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className="w-full text-3xl font-bold text-gray-900 border-none outline-none focus:ring-0 p-0 bg-transparent placeholder-gray-300"
+                        className="w-full text-3xl font-bold text-zinc-100 border-none outline-none focus:ring-0 p-0 bg-transparent placeholder-zinc-700 transition-colors"
                         placeholder="Untitled"
                     />
                 ) : (
-                    <h1 className="text-3xl font-bold text-gray-900">{title}</h1>
+                    <h1 className="text-3xl font-bold text-zinc-100">{title}</h1>
                 )}
             </div>
 
             {/* Editor */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 min-h-[500px]">
+            <div className="bg-zinc-900 rounded-xl shadow-lg border border-zinc-800 min-h-[500px]">
                 <NoteEditor
                     value={content}
                     onChange={setContent}

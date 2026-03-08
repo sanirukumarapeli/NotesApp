@@ -12,7 +12,7 @@ function App() {
     return (
         <AuthProvider>
             <Router>
-                <div className="min-h-screen bg-gray-50">
+                <div className="min-h-screen bg-[#09090b] text-zinc-100 selection:bg-indigo-500/30">
                     <Navbar />
                     <Routes>
                         <Route path="/login" element={<Login />} />

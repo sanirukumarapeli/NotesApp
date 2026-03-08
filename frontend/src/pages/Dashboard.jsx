@@ -75,14 +75,14 @@ const Dashboard = () => {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">My Notes</h1>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <h1 className="text-2xl font-bold text-zinc-100">My Notes</h1>
+                    <p className="text-sm text-zinc-400 mt-1">
                         {notes.length} note{notes.length !== 1 ? 's' : ''}
                     </p>
                 </div>
                 <button
                     onClick={() => setShowCreate(!showCreate)}
-                    className="bg-indigo-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-indigo-700 transition-colors inline-flex items-center space-x-2"
+                    className="bg-indigo-600/90 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-indigo-600 active:scale-95 transition-all duration-200 inline-flex items-center space-x-2 shadow-[0_0_15px_rgba(79,70,229,0.3)] hover:shadow-[0_0_20px_rgba(79,70,229,0.5)]"
                 >
                     <span>+ New Note</span>
                 </button>
@@ -90,19 +90,19 @@ const Dashboard = () => {
 
             {/* Create Note Form */}
             {showCreate && (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mb-6">
+                <div className="bg-zinc-900 rounded-xl shadow-lg border border-zinc-800 p-5 mb-6">
                     <form onSubmit={handleCreate} className="flex items-center space-x-3">
                         <input
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             placeholder="Enter note title..."
-                            className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            className="flex-1 px-4 py-2.5 bg-[#09090b] border border-zinc-800 rounded-lg text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-zinc-500 transition-all"
                             autoFocus
                         />
                         <button
                             type="submit"
-                            className="bg-indigo-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+                            className="bg-zinc-800 text-zinc-100 px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-zinc-700 active:scale-95 transition-all duration-200"
                         >
                             Create
                         </button>
@@ -112,7 +112,7 @@ const Dashboard = () => {
                                 setShowCreate(false);
                                 setTitle('');
                             }}
-                            className="text-gray-400 hover:text-gray-600 px-3 py-2.5"
+                            className="text-zinc-500 hover:text-zinc-300 px-3 py-2.5 transition-colors"
                         >
                             Cancel
                         </button>
@@ -128,15 +128,15 @@ const Dashboard = () => {
             {/* Notes Grid */}
             {loading ? (
                 <div className="flex items-center justify-center py-20">
-                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
+                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500"></div>
                 </div>
             ) : notes.length === 0 ? (
                 <div className="text-center py-20">
-                    <div className="text-5xl mb-4">📝</div>
-                    <h2 className="text-xl font-semibold text-gray-700 mb-2">
+                    <div className="text-5xl mb-4 opacity-70">📝</div>
+                    <h2 className="text-xl font-semibold text-zinc-300 mb-2">
                         No notes yet
                     </h2>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-zinc-500 text-sm">
                         Click &quot;+ New Note&quot; to create your first note
                     </p>
                 </div>

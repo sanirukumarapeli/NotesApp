@@ -12,45 +12,45 @@ const NoteCard = ({ note, onDelete, currentUserId }) => {
     };
 
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow p-5 flex flex-col">
+        <div className="bg-zinc-900 rounded-xl shadow-lg border border-zinc-800 hover:border-zinc-700 hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300 p-5 flex flex-col group">
             <div className="flex items-start justify-between mb-2">
                 <Link
                     to={`/notes/${note._id}`}
-                    className="text-lg font-semibold text-gray-900 hover:text-indigo-600 transition-colors line-clamp-1"
+                    className="text-lg font-semibold text-zinc-100 group-hover:text-indigo-400 transition-colors line-clamp-1"
                 >
                     {note.title}
                 </Link>
                 {note.isPinned && (
-                    <span className="text-indigo-500 ml-2 flex-shrink-0" title="Pinned">
+                    <span className="text-indigo-400 ml-2 flex-shrink-0" title="Pinned">
                         📌
                     </span>
                 )}
             </div>
 
-            <p className="text-gray-500 text-sm flex-1 mb-3 line-clamp-3">
+            <p className="text-zinc-400 text-sm flex-1 mb-3 line-clamp-3">
                 {getPreview(note.content)}
             </p>
 
-            <div className="flex items-center justify-between text-xs text-gray-400">
+            <div className="flex items-center justify-between text-xs text-zinc-500">
                 <span>{formatDate(note.updatedAt)}</span>
                 <div className="flex items-center space-x-2">
                     {note.collaborators?.length > 0 && (
-                        <span className="bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full">
+                        <span className="bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded-full border border-indigo-500/20">
                             {note.collaborators.length} collaborator{note.collaborators.length > 1 ? 's' : ''}
                         </span>
                     )}
                     {!isOwner && (
-                        <span className="bg-green-50 text-green-600 px-2 py-0.5 rounded-full">
+                        <span className="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/20">
                             Shared
                         </span>
                     )}
                 </div>
             </div>
 
-            <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+            <div className="flex items-center justify-between mt-3 pt-3 border-t border-zinc-800/50">
                 <Link
                     to={`/notes/${note._id}`}
-                    className="text-indigo-600 text-sm font-medium hover:text-indigo-800"
+                    className="text-indigo-400 text-sm font-medium hover:text-indigo-300 transition-colors"
                 >
                     Open →
                 </Link>
@@ -60,7 +60,7 @@ const NoteCard = ({ note, onDelete, currentUserId }) => {
                             e.preventDefault();
                             onDelete(note._id);
                         }}
-                        className="text-red-400 text-sm hover:text-red-600 transition-colors"
+                        className="text-rose-500 text-sm hover:text-rose-400 transition-colors"
                     >
                         Delete
                     </button>

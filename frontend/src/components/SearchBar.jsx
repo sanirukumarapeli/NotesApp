@@ -21,10 +21,10 @@ const SearchBar = ({ onSearch }) => {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search notes..."
-                    className="w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full pl-10 pr-10 py-2.5 bg-zinc-900 border border-zinc-800 rounded-lg text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-zinc-500 transition-all"
                 />
                 <svg
-                    className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -40,7 +40,7 @@ const SearchBar = ({ onSearch }) => {
                     <button
                         type="button"
                         onClick={handleClear}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors"
                     >
                         ✕
                     </button>
@@ -48,7 +48,7 @@ const SearchBar = ({ onSearch }) => {
             </div>
             <button
                 type="submit"
-                className="bg-indigo-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+                className="bg-zinc-800 text-zinc-100 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-zinc-700 active:scale-95 transition-all duration-200"
             >
                 Search
             </button>
