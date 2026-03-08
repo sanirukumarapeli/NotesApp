@@ -1,0 +1,45 @@
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { AuthProvider } from './context/AuthContext';
+import Navbar from './components/Navbar';
+import PrivateRoute from './routes/PrivateRoute';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import NotePage from './pages/NotePage';
+
+function App() {
+    return (
+        <AuthProvider>
+            <Router>
+                <div className="min-h-screen bg-gray-50">
+                    <Navbar />
+                    <Routes>
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route
+                            path="/"
+                            element={
+                                <PrivateRoute>
+                                    <Dashboard />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/notes/:id"
+                            element={
+                                <PrivateRoute>
+                                    <NotePage />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route path="*" element={<Navigate to="/" replace />} />
+                    </Routes>
+                </div>
+                <Toaster position="bottom-right" />
+            </Router>
+        </AuthProvider>
+    );
+}
+
+export default App;

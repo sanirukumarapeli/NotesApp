@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* React Quill overrides for Tailwind compatibility */
+.note-editor .ql-container {
+  border: none !important;
+  font-size: 1rem;
+  font-family: inherit;
+  min-height: 450px;
+}
+
+.note-editor .ql-toolbar {
+  border: none !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  background-color: #fafafa;
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+
+.note-editor .ql-editor {
+  padding: 1.5rem;
+  line-height: 1.75;
+  min-height: 450px;
+}
+
+.note-editor .ql-editor.ql-blank::before {
+  color: #9ca3af;
+  font-style: normal;
+}
+
+.note-editor .ql-editor img {
+  max-width: 100%;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
