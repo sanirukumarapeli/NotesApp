@@ -4,7 +4,7 @@ import api from '../services/api';
 import useAuth from '../hooks/useAuth';
 import NoteCard from '../components/NoteCard';
 import SearchBar from '../components/SearchBar';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 const Dashboard = () => {
     const [notes, setNotes] = useState([]);
@@ -19,7 +19,7 @@ const Dashboard = () => {
             const { data } = await api.get('/api/notes');
             setNotes(data);
         } catch (error) {
-            toast.error('Failed to load notes');
+            toast.error('📝 Failed to load notes');
         } finally {
             setLoading(false);
         }
@@ -39,7 +39,7 @@ const Dashboard = () => {
             const { data } = await api.get(`/api/notes/search?q=${encodeURIComponent(query)}`);
             setNotes(data);
         } catch (error) {
-            toast.error('Search failed');
+            toast.error('🔍 Search failed. Please try again');
         } finally {
             setLoading(false);
         }
@@ -51,10 +51,15 @@ const Dashboard = () => {
 
         try {
             const { data } = await api.post('/api/notes', { title: title.trim() });
-            toast.success('Note created!');
+            toast.success(`✨ Note "${data.title}" created!`);
             navigate(`/notes/${data._id}`);
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to create note');
+            const message = error.response?.data?.message;
+            if (message?.includes('Title is required')) {
+                toast.error('✏️ Please enter a note title');
+            } else {
+                toast.error(`❌ ${message || 'Failed to create note'}`);
+            }
         }
     };
 
@@ -64,9 +69,9 @@ const Dashboard = () => {
         try {
             await api.delete(`/api/notes/${noteId}`);
             setNotes((prev) => prev.filter((n) => n._id !== noteId));
-            toast.success('Note deleted');
+            toast.success('🗑️ Note deleted successfully');
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to delete note');
+            toast.error(`❌ ${error.response?.data?.message || 'Failed to delete note'}`);
         }
     };
 

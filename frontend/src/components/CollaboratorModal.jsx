@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import api from '../services/api';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 const CollaboratorModal = ({ noteId, collaborators, onUpdate, onClose }) => {
     const [email, setEmail] = useState('');
@@ -19,9 +19,18 @@ const CollaboratorModal = ({ noteId, collaborators, onUpdate, onClose }) => {
             });
             onUpdate(data);
             setEmail('');
-            toast.success('Collaborator added!');
+            toast.success(`👥 ${email.trim()} added as ${role}!`);
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to add collaborator');
+            const message = error.response?.data?.message;
+            if (message?.includes('User not found')) {
+                toast.error('👤 User with that email not found');
+            } else if (message?.includes('already a collaborator')) {
+                toast.error('⚠️ User is already a collaborator');
+            } else if (message?.includes('cannot add yourself')) {
+                toast.error('🙅 You cannot add yourself as a collaborator');
+            } else {
+                toast.error(`❌ ${message || 'Failed to add collaborator'}`);
+            }
         } finally {
             setLoading(false);
         }
@@ -33,9 +42,9 @@ const CollaboratorModal = ({ noteId, collaborators, onUpdate, onClose }) => {
                 `/api/notes/${noteId}/collaborators/${userId}`
             );
             onUpdate(data);
-            toast.success('Collaborator removed');
+            toast.success('👋 Collaborator removed');
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to remove collaborator');
+            toast.error(`❌ ${error.response?.data?.message || 'Failed to remove collaborator'}`);
         }
     };
 

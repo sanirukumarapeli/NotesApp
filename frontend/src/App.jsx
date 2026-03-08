@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from 'sonner';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import PrivateRoute from './routes/PrivateRoute';
@@ -36,7 +36,15 @@ function App() {
                         <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
                 </div>
-                <Toaster position="bottom-right" />
+                <Toaster
+                    position="top-center"
+                    richColors
+                    theme="dark"
+                    duration={4000}
+                    closeButton
+                    expand={true}
+                    visibleToasts={5}
+                />
             </Router>
         </AuthProvider>
     );

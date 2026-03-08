@@ -4,7 +4,7 @@ import api from '../services/api';
 import useAuth from '../hooks/useAuth';
 import NoteEditor from '../components/NoteEditor';
 import CollaboratorModal from '../components/CollaboratorModal';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 const NotePage = () => {
     const { id } = useParams();
@@ -25,7 +25,7 @@ const NotePage = () => {
             setTitle(data.title);
             setContent(data.content);
         } catch (error) {
-            toast.error('Failed to load note');
+            toast.error('📄 Failed to load note');
             navigate('/');
         } finally {
             setLoading(false);
@@ -48,9 +48,9 @@ const NotePage = () => {
         try {
             const { data } = await api.put(`/api/notes/${id}`, { title, content });
             setNote(data);
-            toast.success('Saved!');
+            toast.success('✅ Changes saved!');
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to save');
+            toast.error(`❌ ${error.response?.data?.message || 'Failed to save changes'}`);
         } finally {
             setSaving(false);
         }
@@ -63,9 +63,9 @@ const NotePage = () => {
                 isPinned: !note.isPinned,
             });
             setNote(data);
-            toast.success(data.isPinned ? 'Note pinned' : 'Note unpinned');
+            toast.success(data.isPinned ? '📌 Note pinned!' : '📎 Note unpinned!');
         } catch (error) {
-            toast.error('Failed to update pin status');
+            toast.error('❌ Failed to update pin status');
         }
     };
 
