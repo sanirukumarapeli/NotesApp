@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import { toast } from 'sonner';
+import { motion } from 'framer-motion';
+import { Mail, Lock, LogIn, Eye, EyeOff } from 'lucide-react';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -37,38 +39,53 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">
-            <div className="w-full max-w-md">
-                <div className="bg-zinc-900 rounded-2xl shadow-xl border border-zinc-800 p-8">
-                    <h1 className="text-2xl font-bold text-zinc-100 text-center mb-2">
+        <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 relative overflow-hidden">
+            {/* Background elements */}
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl -z-10 animate-pulse"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
+
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="w-full max-w-md"
+            >
+                <div className="bg-zinc-900/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-zinc-800/80 p-8 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-600"></div>
+
+                    <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-100 to-zinc-400 text-center mb-2 mt-2">
                         Welcome Back
                     </h1>
-                    <p className="text-zinc-500 text-center text-sm mb-8">
+                    <p className="text-zinc-400 text-center text-sm mb-8">
                         Sign in to access your notes
                     </p>
 
                     <form onSubmit={handleSubmit} className="space-y-5">
-                        <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-zinc-300 mb-1">
+                        <div className="space-y-1.5">
+                            <label htmlFor="email" className="block text-sm font-medium text-zinc-300 ml-1">
                                 Email
                             </label>
-                            <input
-                                id="email"
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                                tabIndex={1}
-                                className="w-full px-4 py-2.5 bg-[#09090b] border border-zinc-800 rounded-lg text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-zinc-600 transition-all"
-                                placeholder="you@example.com"
-                            />
+                            <div className="relative group">
+                                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" size={20} />
+                                <input
+                                    id="email"
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                    tabIndex={1}
+                                    className="w-full pl-11 pr-4 py-3 bg-[#09090b]/50 border border-zinc-800 rounded-xl text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 placeholder-zinc-600 transition-all shadow-inner"
+                                    placeholder="you@example.com"
+                                />
+                            </div>
                         </div>
 
-                        <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-zinc-300 mb-1">
+                        <div className="space-y-1.5">
+                            <label htmlFor="password" className="block text-sm font-medium text-zinc-300 ml-1">
                                 Password
                             </label>
-                            <div className="relative">
+                            <div className="relative group">
+                                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" size={20} />
                                 <input
                                     id="password"
                                     type={showPassword ? "text" : "password"}
@@ -76,7 +93,7 @@ const Login = () => {
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
                                     tabIndex={2}
-                                    className="w-full px-4 py-2.5 pr-10 bg-[#09090b] border border-zinc-800 rounded-lg text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-zinc-600 transition-all"
+                                    className="w-full pl-11 pr-12 py-3 bg-[#09090b]/50 border border-zinc-800 rounded-xl text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 placeholder-zinc-600 transition-all shadow-inner"
                                     placeholder="••••••••"
                                 />
                                 <button
@@ -84,18 +101,9 @@ const Login = () => {
                                     onClick={() => setShowPassword(!showPassword)}
                                     tabIndex={3}
                                     aria-label={showPassword ? "Hide password" : "Show password"}
-                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-500 hover:text-zinc-300 focus:outline-none focus:text-zinc-300 transition-colors"
+                                    className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-zinc-500 hover:text-zinc-300 focus:outline-none focus:text-zinc-300 transition-colors"
                                 >
-                                    {showPassword ? (
-                                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-                                        </svg>
-                                    ) : (
-                                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                        </svg>
-                                    )}
+                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
                             </div>
                         </div>
@@ -104,24 +112,31 @@ const Login = () => {
                             type="submit"
                             disabled={loading}
                             tabIndex={4}
-                            className="w-full bg-indigo-600 text-white py-2.5 rounded-lg font-medium hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-zinc-900 active:scale-95 transition-all duration-200 shadow-[0_0_15px_rgba(79,70,229,0.2)] hover:shadow-[0_0_20px_rgba(79,70,229,0.4)] disabled:opacity-50"
+                            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 mt-2 rounded-xl font-medium hover:from-indigo-500 hover:to-purple-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-zinc-900 active:scale-95 transition-all duration-200 shadow-[0_4px_15px_rgba(79,70,229,0.3)] hover:shadow-[0_4px_25px_rgba(79,70,229,0.5)] disabled:opacity-50 flex items-center justify-center space-x-2"
                         >
-                            {loading ? 'Signing in...' : 'Sign In'}
+                            {loading ? (
+                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                            ) : (
+                                <>
+                                    <span>Sign In</span>
+                                    <LogIn size={18} />
+                                </>
+                            )}
                         </button>
                     </form>
 
-                    <p className="text-center text-sm text-zinc-500 mt-6">
+                    <p className="text-center text-sm text-zinc-500 mt-8">
                         Don&apos;t have an account?{' '}
                         <Link
                             to="/register"
                             tabIndex={5}
-                            className="text-indigo-400 font-medium hover:text-indigo-300 focus:outline-none focus:underline transition-colors"
+                            className="text-indigo-400 font-medium hover:text-indigo-300 focus:outline-none hover:underline underline-offset-4 transition-all"
                         >
                             Sign up
                         </Link>
                     </p>
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 };

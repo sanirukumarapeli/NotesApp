@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import api from '../services/api';
 import { toast } from 'sonner';
+import { UserPlus, X, Mail } from 'lucide-react';
 
 const CollaboratorModal = ({ noteId, collaborators, onUpdate, onClose }) => {
     const [email, setEmail] = useState('');
@@ -49,88 +50,104 @@ const CollaboratorModal = ({ noteId, collaborators, onUpdate, onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-[#09090b]/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all">
-            <div className="bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-800 w-full max-w-md">
+        <div className="fixed inset-0 bg-[#09090b]/80 backdrop-blur-md flex items-center justify-center z-50 p-4 transition-all opacity-100 animate-in fade-in duration-300">
+            <div className="bg-zinc-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-zinc-800/80 w-full max-w-md animate-in zoom-in-95 duration-300">
                 <div className="flex items-center justify-between p-5 border-b border-zinc-800/50">
-                    <h2 className="text-lg font-semibold text-zinc-100">
+                    <h2 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-100 to-zinc-400">
                         Manage Collaborators
                     </h2>
                     <button
                         onClick={onClose}
-                        className="text-zinc-500 hover:text-zinc-300 text-xl transition-colors"
+                        className="text-zinc-500 hover:text-zinc-100 p-1 rounded-lg hover:bg-zinc-800 transition-colors"
                     >
-                        ✕
+                        <X size={20} />
                     </button>
                 </div>
 
-                <div className="p-5">
-                    <form onSubmit={handleAdd} className="space-y-3 mb-5">
-                        <div>
-                            <label className="block text-sm font-medium text-zinc-300 mb-1">
+                <div className="p-6">
+                    <form onSubmit={handleAdd} className="space-y-4 mb-6">
+                        <div className="space-y-1.5">
+                            <label className="block text-sm font-medium text-zinc-300 ml-1">
                                 Email Address
                             </label>
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="collaborator@example.com"
-                                className="w-full px-3 py-2 bg-[#09090b] border border-zinc-800 rounded-lg text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-zinc-600 transition-all"
-                                required
-                            />
+                            <div className="relative group">
+                                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" size={18} />
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="collaborator@example.com"
+                                    className="w-full pl-10 pr-4 py-2.5 bg-[#09090b]/50 border border-zinc-800 rounded-xl text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 placeholder-zinc-600 transition-all shadow-inner"
+                                    required
+                                />
+                            </div>
                         </div>
-                        <div>
-                            <label className="block text-sm font-medium text-zinc-300 mb-1">
+                        <div className="space-y-1.5">
+                            <label className="block text-sm font-medium text-zinc-300 ml-1">
                                 Role
                             </label>
                             <select
                                 value={role}
                                 onChange={(e) => setRole(e.target.value)}
-                                className="w-full px-3 py-2 bg-[#09090b] border border-zinc-800 rounded-lg text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                                className="w-full px-4 py-2.5 bg-[#09090b]/50 border border-zinc-800 rounded-xl text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all shadow-inner appearance-none custom-select"
                             >
-                                <option value="viewer">Viewer (read only)</option>
-                                <option value="editor">Editor (can edit)</option>
+                                <option value="viewer">Viewer (Read Only)</option>
+                                <option value="editor">Editor (Can Edit)</option>
                             </select>
                         </div>
                         <button
                             type="submit"
-                            disabled={loading}
-                            className="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-500 active:scale-95 transition-all duration-200 shadow-[0_0_15px_rgba(79,70,229,0.2)] disabled:opacity-50"
+                            disabled={loading || !email}
+                            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-3 mt-2 rounded-xl text-sm font-medium hover:from-indigo-500 hover:to-purple-500 active:scale-95 transition-all duration-200 shadow-[0_4px_15px_rgba(79,70,229,0.3)] disabled:opacity-50 flex items-center justify-center space-x-2"
                         >
-                            {loading ? 'Adding...' : 'Add Collaborator'}
+                            {loading ? (
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                            ) : (
+                                <>
+                                    <span>Add Collaborator</span>
+                                    <UserPlus size={16} />
+                                </>
+                            )}
                         </button>
                     </form>
 
                     {collaborators?.length > 0 && (
                         <div>
-                            <h3 className="text-sm font-medium text-zinc-400 mb-2">
+                            <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3 ml-1">
                                 Current Collaborators
                             </h3>
-                            <ul className="space-y-2">
+                            <ul className="space-y-3">
                                 {collaborators.map((c) => (
                                     <li
                                         key={c.user._id}
-                                        className="flex items-center justify-between bg-[#09090b] px-3 py-2 rounded-lg border border-zinc-800/50"
+                                        className="flex items-center justify-between bg-[#09090b]/50 px-4 py-3 rounded-xl border border-zinc-800/50"
                                     >
-                                        <div>
-                                            <p className="text-sm font-medium text-zinc-200">
-                                                {c.user.name}
-                                            </p>
-                                            <p className="text-xs text-zinc-500">{c.user.email}</p>
+                                        <div className="flex items-center space-x-3">
+                                            <div className="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-sm font-bold border border-indigo-500/20">
+                                                {c.user.name.charAt(0).toUpperCase()}
+                                            </div>
+                                            <div>
+                                                <p className="text-sm font-medium text-zinc-200">
+                                                    {c.user.name}
+                                                </p>
+                                                <p className="text-xs text-zinc-500">{c.user.email}</p>
+                                            </div>
                                         </div>
-                                        <div className="flex items-center space-x-2">
+                                        <div className="flex items-center space-x-3">
                                             <span
-                                                className={`text-xs px-2 py-0.5 rounded-full border ${c.role === 'editor'
+                                                className={`text-xs font-medium px-2.5 py-1 rounded-lg border ${c.role === 'editor'
                                                     ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                                                    : 'bg-zinc-800 text-zinc-400 border-zinc-700'
+                                                    : 'bg-zinc-800/50 text-zinc-400 border-zinc-700/50'
                                                     }`}
                                             >
-                                                {c.role}
+                                                {c.role.charAt(0).toUpperCase() + c.role.slice(1)}
                                             </span>
                                             <button
                                                 onClick={() => handleRemove(c.user._id)}
-                                                className="text-rose-500 hover:text-rose-400 text-sm p-1 transition-colors"
+                                                className="text-zinc-500 hover:text-rose-400 hover:bg-rose-500/10 p-1.5 rounded-lg transition-all"
+                                                title="Remove collaborator"
                                             >
-                                                ✕
+                                                <X size={16} />
                                             </button>
                                         </div>
                                     </li>
@@ -140,9 +157,11 @@ const CollaboratorModal = ({ noteId, collaborators, onUpdate, onClose }) => {
                     )}
 
                     {(!collaborators || collaborators.length === 0) && (
-                        <p className="text-sm text-zinc-600 text-center py-2">
-                            No collaborators yet
-                        </p>
+                        <div className="text-center py-6 px-4 bg-[#09090b]/30 rounded-xl border border-zinc-800/30 border-dashed mt-4">
+                            <p className="text-sm text-zinc-500">
+                                No collaborators yet. Add someone to start sharing this note.
+                            </p>
+                        </div>
                     )}
                 </div>
             </div>

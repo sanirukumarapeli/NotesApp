@@ -5,6 +5,7 @@ import useAuth from '../hooks/useAuth';
 import NoteEditor from '../components/NoteEditor';
 import CollaboratorModal from '../components/CollaboratorModal';
 import { toast } from 'sonner';
+import { ArrowLeft, Pin, Users, Save, Loader2 } from 'lucide-react';
 
 const NotePage = () => {
     const { id } = useParams();
@@ -76,7 +77,7 @@ const NotePage = () => {
     if (loading) {
         return (
             <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500"></div>
+                <Loader2 className="animate-spin text-indigo-500 w-10 h-10" />
             </div>
         );
     }
@@ -84,32 +85,35 @@ const NotePage = () => {
     if (!note) return null;
 
     return (
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* Top Bar */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-8">
                 <button
                     onClick={() => navigate('/')}
-                    className="text-zinc-400 hover:text-zinc-200 text-sm font-medium inline-flex items-center space-x-1 transition-colors"
+                    className="group flex items-center space-x-2 text-zinc-400 hover:text-zinc-100 text-sm font-medium transition-colors bg-zinc-900/50 hover:bg-zinc-800/80 px-4 py-2 rounded-xl border border-zinc-800"
                 >
-                    <span>← Back to Dashboard</span>
+                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                    <span>Back to Dashboard</span>
                 </button>
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-4">
                     {isOwner && (
                         <>
                             <button
                                 onClick={handleTogglePin}
-                                className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${note.isPinned
-                                    ? 'bg-indigo-500/20 border-indigo-500/50 text-indigo-400'
-                                    : 'border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
+                                className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border transition-all duration-200 ${note.isPinned
+                                    ? 'bg-indigo-500/20 border-indigo-500/50 text-indigo-400 shadow-[0_0_15px_rgba(79,70,229,0.2)]'
+                                    : 'border-zinc-800 bg-zinc-900/50 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
                                     }`}
                             >
-                                {note.isPinned ? '📌 Pinned' : '📌 Pin'}
+                                <Pin size={16} className={note.isPinned ? "fill-current" : ""} />
+                                <span>{note.isPinned ? 'Pinned' : 'Pin'}</span>
                             </button>
                             <button
                                 onClick={() => setShowCollaborators(true)}
-                                className="px-3 py-1.5 rounded-lg text-sm font-medium border border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200 transition-colors"
+                                className="flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-800 bg-zinc-900/50 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200 transition-colors"
                             >
-                                👥 Collaborators ({note.collaborators?.length || 0})
+                                <Users size={16} />
+                                <span>Collaborators ({note.collaborators?.length || 0})</span>
                             </button>
                         </>
                     )}
@@ -117,53 +121,63 @@ const NotePage = () => {
                         <button
                             onClick={handleSave}
                             disabled={saving}
-                            className="bg-indigo-600 text-white px-5 py-1.5 rounded-lg text-sm font-medium hover:bg-indigo-500 active:scale-95 transition-all duration-200 shadow-[0_0_10px_rgba(79,70,229,0.3)] disabled:opacity-50"
+                            className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2 rounded-xl text-sm font-medium hover:from-indigo-500 hover:to-purple-500 active:scale-95 transition-all duration-200 shadow-[0_4px_15px_rgba(79,70,229,0.3)] hover:shadow-[0_4px_25px_rgba(79,70,229,0.5)] disabled:opacity-50 flex items-center space-x-2"
                         >
-                            {saving ? 'Saving...' : 'Save'}
+                            {saving ? (
+                                <Loader2 size={16} className="animate-spin" />
+                            ) : (
+                                <Save size={16} />
+                            )}
+                            <span>{saving ? 'Saving...' : 'Save Notes'}</span>
                         </button>
                     )}
                 </div>
             </div>
 
             {/* Note info */}
-            <div className="mb-4 flex items-center space-x-3 text-xs text-zinc-500">
-                <span>By {note.owner?.name}</span>
+            <div className="mb-6 flex items-center space-x-3 text-sm text-zinc-500 font-medium">
+                <span className="flex items-center space-x-1.5 bg-zinc-900/50 px-3 py-1 rounded-lg border border-zinc-800/50">
+                    <span className="w-5 h-5 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs">
+                        {note.owner?.name?.charAt(0).toUpperCase()}
+                    </span>
+                    <span>{note.owner?.name}</span>
+                </span>
                 <span>•</span>
-                <span>
+                <span className="bg-zinc-900/50 px-3 py-1 rounded-lg border border-zinc-800/50">
                     Updated {new Date(note.updatedAt).toLocaleDateString()}
                 </span>
                 {!isOwner && userRole && (
                     <>
                         <span>•</span>
                         <span
-                            className={`px-2 py-0.5 rounded-full border ${userRole === 'editor'
+                            className={`px-3 py-1 rounded-lg border ${userRole === 'editor'
                                 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                                : 'bg-zinc-800 text-zinc-400 border-zinc-700'
+                                : 'bg-zinc-800/50 text-zinc-400 border-zinc-700/50'
                                 }`}
                         >
-                            {userRole}
+                            {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
                         </span>
                     </>
                 )}
             </div>
 
             {/* Title */}
-            <div className="mb-4">
+            <div className="mb-6 relative group">
                 {canEdit ? (
                     <input
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className="w-full text-3xl font-bold text-zinc-100 border-none outline-none focus:ring-0 p-0 bg-transparent placeholder-zinc-700 transition-colors"
-                        placeholder="Untitled"
+                        className="w-full text-4xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-100 to-zinc-400 border-none outline-none focus:ring-0 p-0 hover:from-white hover:to-zinc-300 transition-all placeholder-zinc-700 caret-indigo-500"
+                        placeholder="Untitled Note"
                     />
                 ) : (
-                    <h1 className="text-3xl font-bold text-zinc-100">{title}</h1>
+                    <h1 className="text-4xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-100 to-zinc-400">{title}</h1>
                 )}
             </div>
 
             {/* Editor */}
-            <div className="bg-zinc-900 rounded-xl shadow-lg border border-zinc-800 min-h-[500px]">
+            <div className="bg-zinc-900/60 backdrop-blur-sm rounded-2xl shadow-xl border border-zinc-800/80 min-h-[500px] overflow-hidden group-focus-within:border-indigo-500/30 group-focus-within:shadow-[0_0_30px_rgba(79,70,229,0.1)] transition-all duration-500">
                 <NoteEditor
                     value={content}
                     onChange={setContent}

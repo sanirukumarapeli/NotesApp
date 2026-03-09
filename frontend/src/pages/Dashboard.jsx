@@ -5,6 +5,39 @@ import useAuth from '../hooks/useAuth';
 import NoteCard from '../components/NoteCard';
 import SearchBar from '../components/SearchBar';
 import { toast } from 'sonner';
+import { motion } from 'framer-motion';
+import { Plus, X, Search, FileText } from 'lucide-react';
+
+const SkeletonNote = () => (
+    <div className="bg-zinc-900/40 rounded-xl shadow-lg border border-zinc-800/30 p-5 flex flex-col animate-pulse">
+        <div className="flex items-start justify-between mb-4">
+            <div className="h-6 w-3/4 bg-zinc-800 rounded-lg"></div>
+            <div className="h-6 w-8 bg-zinc-800 rounded-md"></div>
+        </div>
+        <div className="space-y-2 mb-6 flex-1">
+            <div className="h-4 w-full bg-zinc-800/60 rounded"></div>
+            <div className="h-4 w-5/6 bg-zinc-800/60 rounded"></div>
+            <div className="h-4 w-4/6 bg-zinc-800/60 rounded"></div>
+        </div>
+        <div className="flex items-center justify-between mt-auto pt-4 border-t border-zinc-800/30">
+            <div className="h-4 w-20 bg-zinc-800/60 rounded"></div>
+            <div className="h-8 w-16 bg-zinc-800 rounded-md"></div>
+        </div>
+    </div>
+);
+
+const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: { staggerChildren: 0.1 }
+    }
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+};
 
 const Dashboard = () => {
     const [notes, setNotes] = useState([]);
@@ -79,83 +112,116 @@ const Dashboard = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-                <div>
-                    <h1 className="text-2xl font-bold text-zinc-100">My Notes</h1>
-                    <p className="text-sm text-zinc-400 mt-1">
-                        {notes.length} note{notes.length !== 1 ? 's' : ''}
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+                    <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-100 to-zinc-400">My Notes</h1>
+                    <p className="text-sm text-zinc-400 mt-1 font-medium">
+                        {notes.length} note{notes.length !== 1 ? 's' : ''} organized
                     </p>
-                </div>
-                <button
+                </motion.div>
+                <motion.button
+                    initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+                    whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                     onClick={() => setShowCreate(!showCreate)}
-                    className="bg-indigo-600/90 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-indigo-600 active:scale-95 transition-all duration-200 inline-flex items-center space-x-2 shadow-[0_0_15px_rgba(79,70,229,0.3)] hover:shadow-[0_0_20px_rgba(79,70,229,0.5)]"
+                    className="bg-gradient-to-r from-indigo-600 to-indigo-500 text-white px-5 py-2.5 rounded-xl font-medium shadow-[0_4px_20px_rgba(79,70,229,0.3)] hover:shadow-[0_4px_25px_rgba(79,70,229,0.5)] transition-all duration-300 inline-flex items-center space-x-2"
                 >
-                    <span>+ New Note</span>
-                </button>
+                    <Plus size={18} />
+                    <span>New Note</span>
+                </motion.button>
             </div>
 
             {/* Create Note Form */}
             {showCreate && (
-                <div className="bg-zinc-900 rounded-xl shadow-lg border border-zinc-800 p-5 mb-6">
-                    <form onSubmit={handleCreate} className="flex items-center space-x-3">
-                        <input
-                            type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            placeholder="Enter note title..."
-                            className="flex-1 px-4 py-2.5 bg-[#09090b] border border-zinc-800 rounded-lg text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-zinc-500 transition-all"
-                            autoFocus
-                        />
-                        <button
-                            type="submit"
-                            className="bg-zinc-800 text-zinc-100 px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-zinc-700 active:scale-95 transition-all duration-200"
-                        >
-                            Create
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setShowCreate(false);
-                                setTitle('');
-                            }}
-                            className="text-zinc-500 hover:text-zinc-300 px-3 py-2.5 transition-colors"
-                        >
-                            Cancel
-                        </button>
+                <motion.div
+                    initial={{ opacity: 0, y: -10, height: 0 }}
+                    animate={{ opacity: 1, y: 0, height: 'auto' }}
+                    exit={{ opacity: 0, y: -10, height: 0 }}
+                    className="bg-zinc-900/80 backdrop-blur-md rounded-2xl shadow-xl border border-zinc-800/80 p-5 mb-8"
+                >
+                    <form onSubmit={handleCreate} className="flex flex-col sm:flex-row sm:items-center gap-3">
+                        <div className="relative flex-1">
+                            <FileText size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
+                            <input
+                                type="text"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                placeholder="Enter an inspiring note title..."
+                                className="w-full pl-11 pr-4 py-3 bg-[#09090b]/80 border border-zinc-700/50 rounded-xl text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 placeholder-zinc-500 transition-all shadow-inner"
+                                autoFocus
+                            />
+                        </div>
+                        <div className="flex items-center space-x-3">
+                            <button
+                                type="submit"
+                                disabled={!title.trim()}
+                                className="bg-zinc-100 text-zinc-900 px-6 py-3 rounded-xl text-sm font-semibold hover:bg-white active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:active:scale-100"
+                            >
+                                Create
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setShowCreate(false);
+                                    setTitle('');
+                                }}
+                                className="text-zinc-400 hover:text-zinc-200 p-3 rounded-xl hover:bg-zinc-800/50 transition-colors"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
                     </form>
-                </div>
+                </motion.div>
             )}
 
             {/* Search */}
-            <div className="mb-6">
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-8">
                 <SearchBar onSearch={handleSearch} />
-            </div>
+            </motion.div>
 
             {/* Notes Grid */}
             {loading ? (
-                <div className="flex items-center justify-center py-20">
-                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500"></div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {[1, 2, 3, 4, 5, 6].map((i) => <SkeletonNote key={i} />)}
                 </div>
             ) : notes.length === 0 ? (
-                <div className="text-center py-20">
-                    <div className="text-5xl mb-4 opacity-70">📝</div>
-                    <h2 className="text-xl font-semibold text-zinc-300 mb-2">
-                        No notes yet
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="flex flex-col items-center justify-center py-24 px-4 bg-zinc-900/30 rounded-3xl border border-zinc-800/30 border-dashed"
+                >
+                    <div className="w-20 h-20 bg-indigo-500/10 rounded-full flex items-center justify-center mb-6">
+                        <FileText size={40} className="text-indigo-400" />
+                    </div>
+                    <h2 className="text-2xl font-semibold text-zinc-100 mb-2">
+                        It's quiet here
                     </h2>
-                    <p className="text-zinc-500 text-sm">
-                        Click &quot;+ New Note&quot; to create your first note
+                    <p className="text-zinc-400 text-center max-w-sm mb-8 text-lg">
+                        You don't have any notes yet. Create your first note to start organizing your thoughts.
                     </p>
-                </div>
+                    <button
+                        onClick={() => setShowCreate(true)}
+                        className="text-indigo-400 hover:text-indigo-300 font-medium hover:underline flex items-center space-x-2"
+                    >
+                        <span>Create first note</span>
+                        <motion.span animate={{ x: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>→</motion.span>
+                    </button>
+                </motion.div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="show"
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
+                >
                     {notes.map((note) => (
-                        <NoteCard
-                            key={note._id}
-                            note={note}
-                            onDelete={handleDelete}
-                            currentUserId={user?._id}
-                        />
+                        <motion.div key={note._id} variants={itemVariants}>
+                            <NoteCard
+                                note={note}
+                                onDelete={handleDelete}
+                                currentUserId={user?._id}
+                            />
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
             )}
         </div>
     );
