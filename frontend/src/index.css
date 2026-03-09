@@ -2,55 +2,99 @@
 @tailwind components;
 @tailwind utilities;
 
-/* React Quill overrides for Tailwind compatibility - Dark Theme */
+/* React Quill overrides for Tailwind compatibility */
 .note-editor .ql-container {
   border: none !important;
   font-size: 1rem;
   font-family: inherit;
   min-height: 450px;
   background-color: transparent !important;
-  color: #f4f4f5; /* zinc-100 */
+  color: #27272a; /* zinc-800 - light mode */
+}
+
+.dark .note-editor .ql-container {
+  color: #f4f4f5; /* zinc-100 - dark mode */
 }
 
 .note-editor .ql-toolbar {
   border: none !important;
-  border-bottom: 1px solid #27272a !important; /* zinc-800 */
-  background-color: #18181b; /* zinc-900 */
+  border-bottom: 1px solid #e4e4e7 !important; /* zinc-200 */
+  background-color: #f4f4f5; /* zinc-100 */
   border-radius: 0.75rem 0.75rem 0 0;
 }
 
-/* Darken quill toolbar buttons and dropdowns */
+.dark .note-editor .ql-toolbar {
+  border-bottom-color: #27272a !important; /* zinc-800 */
+  background-color: #18181b; /* zinc-900 */
+}
+
+/* Quill toolbar buttons */
 .note-editor .ql-toolbar button {
-  color: #a1a1aa !important; /* zinc-400 */
+  color: #71717a !important; /* zinc-500 */
 }
 .note-editor .ql-toolbar button:hover,
 .note-editor .ql-toolbar button:focus {
-  color: #e4e4e7 !important; /* zinc-200 */
+  color: #27272a !important; /* zinc-800 */
 }
 .note-editor .ql-toolbar .ql-stroke {
-  stroke: #a1a1aa !important;
+  stroke: #71717a !important;
 }
 .note-editor .ql-toolbar .ql-fill {
-  fill: #a1a1aa !important;
+  fill: #71717a !important;
 }
 .note-editor .ql-toolbar button:hover .ql-stroke,
 .note-editor .ql-toolbar button:focus .ql-stroke,
 .note-editor .ql-toolbar .ql-picker-label:hover .ql-stroke {
-  stroke: #e4e4e7 !important;
+  stroke: #27272a !important;
 }
 .note-editor .ql-toolbar button:hover .ql-fill,
 .note-editor .ql-toolbar button:focus .ql-fill,
 .note-editor .ql-toolbar .ql-picker-label:hover .ql-fill {
-  fill: #e4e4e7 !important;
+  fill: #27272a !important;
 }
 .note-editor .ql-picker-options {
+  background-color: #ffffff !important;
+  border: 1px solid #e4e4e7 !important;
+}
+.note-editor .ql-picker-item {
+  color: #71717a !important;
+}
+.note-editor .ql-picker-item:hover {
+  color: #27272a !important;
+}
+
+/* Dark mode overrides for toolbar */
+.dark .note-editor .ql-toolbar button {
+  color: #a1a1aa !important;
+}
+.dark .note-editor .ql-toolbar button:hover,
+.dark .note-editor .ql-toolbar button:focus {
+  color: #e4e4e7 !important;
+}
+.dark .note-editor .ql-toolbar .ql-stroke {
+  stroke: #a1a1aa !important;
+}
+.dark .note-editor .ql-toolbar .ql-fill {
+  fill: #a1a1aa !important;
+}
+.dark .note-editor .ql-toolbar button:hover .ql-stroke,
+.dark .note-editor .ql-toolbar button:focus .ql-stroke,
+.dark .note-editor .ql-toolbar .ql-picker-label:hover .ql-stroke {
+  stroke: #e4e4e7 !important;
+}
+.dark .note-editor .ql-toolbar button:hover .ql-fill,
+.dark .note-editor .ql-toolbar button:focus .ql-fill,
+.dark .note-editor .ql-toolbar .ql-picker-label:hover .ql-fill {
+  fill: #e4e4e7 !important;
+}
+.dark .note-editor .ql-picker-options {
   background-color: #18181b !important;
   border: 1px solid #27272a !important;
 }
-.note-editor .ql-picker-item {
+.dark .note-editor .ql-picker-item {
   color: #a1a1aa !important;
 }
-.note-editor .ql-picker-item:hover {
+.dark .note-editor .ql-picker-item:hover {
   color: #e4e4e7 !important;
 }
 
@@ -61,12 +105,24 @@
 }
 
 .note-editor .ql-editor.ql-blank::before {
-  color: #52525b; /* zinc-600 */
+  color: #a1a1aa; /* zinc-400 */
   font-style: normal;
+}
+
+.dark .note-editor .ql-editor.ql-blank::before {
+  color: #52525b; /* zinc-600 */
 }
 
 .note-editor .ql-editor img {
   max-width: 100%;
   border-radius: 0.5rem;
   margin: 1rem 0;
+}
+
+.note-editor .ql-toolbar .ql-picker-label {
+  color: #71717a !important;
+}
+
+.dark .note-editor .ql-toolbar .ql-picker-label {
+  color: #a1a1aa !important;
 }

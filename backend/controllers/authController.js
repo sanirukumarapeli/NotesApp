@@ -68,4 +68,76 @@ const getMe = async (req, res) => {
   });
 };
 
-module.exports = { registerUser, loginUser, getMe };
+// @desc    Update user profile
+// @route   PUT /api/auth/profile
+const updateProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const { name, email } = req.body;
+    if (name) user.name = name;
+    if (email) {
+      const existing = await User.findOne({ email, _id: { $ne: user._id } });
+      if (existing) {
+        return res.status(400).json({ message: "Email already in use" });
+      }
+      user.email = email;
+    }
+
+    const updated = await user.save();
+    res.json({
+      _id: updated._id,
+      name: updated.name,
+      email: updated.email,
+      token: generateToken(updated._id),
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Update user password
+// @route   PUT /api/auth/password
+const updatePassword = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("+password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) {
+      return res
+        .status(400)
+        .json({ message: "Please provide current and new password" });
+    }
+
+    if (newPassword.length < 6) {
+      return res
+        .status(400)
+        .json({ message: "New password must be at least 6 characters" });
+    }
+
+    const isMatch = await user.matchPassword(currentPassword);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Current password is incorrect" });
+    }
+
+    user.password = newPassword;
+    await user.save();
+    res.json({ message: "Password updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  getMe,
+  updateProfile,
+  updatePassword,
+};

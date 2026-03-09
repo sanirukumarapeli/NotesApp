@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^1.7.7",
+    "cmdk": "^1.1.1",
     "dompurify": "^3.1.6",
     "framer-motion": "^12.35.2",
     "lucide-react": "^0.577.0",

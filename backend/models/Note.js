@@ -34,6 +34,11 @@ const noteSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isFavorite: {
+      type: Map,
+      of: Boolean,
+      default: {},
+    },
   },
   { timestamps: true },
 );

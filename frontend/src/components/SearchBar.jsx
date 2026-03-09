@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = ({ onSearch, autoFocus = false }) => {
     const [query, setQuery] = useState('');
 
     const handleSubmit = (e) => {
@@ -21,7 +21,8 @@ const SearchBar = ({ onSearch }) => {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search notes..."
-                    className="w-full pl-10 pr-10 py-2.5 bg-zinc-900 border border-zinc-800 rounded-lg text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-zinc-500 transition-all"
+                    className="w-full pl-10 pr-10 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-zinc-400 dark:placeholder-zinc-500 transition-all"
+                    autoFocus={autoFocus}
                 />
                 <svg
                     className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500"
@@ -48,7 +49,7 @@ const SearchBar = ({ onSearch }) => {
             </div>
             <button
                 type="submit"
-                className="bg-zinc-800 text-zinc-100 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-zinc-700 active:scale-95 transition-all duration-200"
+                className="bg-zinc-200 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-zinc-300 dark:hover:bg-zinc-700 active:scale-95 transition-all duration-200"
             >
                 Search
             </button>

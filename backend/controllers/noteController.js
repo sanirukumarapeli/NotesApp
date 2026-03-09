@@ -271,6 +271,82 @@ const removeCollaborator = async (req, res) => {
   }
 };
 
+// @desc    Toggle favorite status for current user
+// @route   PUT /api/notes/:id/favorite
+const toggleFavorite = async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: "Invalid note ID" });
+    }
+
+    const note = await Note.findById(req.params.id);
+    if (!note) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+
+    const isOwner = note.owner.toString() === req.user._id.toString();
+    const isCollaborator = note.collaborators.some(
+      (c) => c.user.toString() === req.user._id.toString(),
+    );
+
+    if (!isOwner && !isCollaborator) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const userId = req.user._id.toString();
+    const currentVal = note.isFavorite.get(userId) || false;
+    note.isFavorite.set(userId, !currentVal);
+
+    await note.save();
+    await note.populate("owner", "name email");
+    await note.populate("collaborators.user", "name email");
+
+    res.json(note);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Get favorite notes for current user
+// @route   GET /api/notes/favorites
+const getFavoriteNotes = async (req, res) => {
+  try {
+    const userId = req.user._id.toString();
+    const notes = await Note.find({
+      $or: [{ owner: req.user._id }, { "collaborators.user": req.user._id }],
+    })
+      .populate("owner", "name email")
+      .populate("collaborators.user", "name email")
+      .sort({ updatedAt: -1 });
+
+    const favorites = notes.filter(
+      (note) => note.isFavorite && note.isFavorite.get(userId),
+    );
+
+    res.json(favorites);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Get shared notes (where user is a collaborator, not owner)
+// @route   GET /api/notes/shared
+const getSharedNotes = async (req, res) => {
+  try {
+    const notes = await Note.find({
+      "collaborators.user": req.user._id,
+      owner: { $ne: req.user._id },
+    })
+      .populate("owner", "name email")
+      .populate("collaborators.user", "name email")
+      .sort({ updatedAt: -1 });
+
+    res.json(notes);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getNotes,
   getNoteById,
@@ -280,4 +356,7 @@ module.exports = {
   searchNotes,
   addCollaborator,
   removeCollaborator,
+  toggleFavorite,
+  getFavoriteNotes,
+  getSharedNotes,
 };
